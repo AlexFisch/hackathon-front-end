@@ -8,11 +8,15 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class DataService {
   private responseDataSubject = new BehaviorSubject<any>(null);
-  responseData$ = this.responseDataSubject.asObservable();
+
 
   constructor() { }
 
   setResponseData(data: any) {
     this.responseDataSubject.next(data);
+  }
+
+  getResponseData() {
+    return this.responseDataSubject.asObservable();
   }
 }

@@ -33,9 +33,7 @@ export class LoginComponent implements OnInit {
             email: ['', Validators.required],
             password: ['', Validators.required]
         });
-      this.dataService.responseData$.subscribe(data => {
-        this.responseData = data;
-       });
+
     }
 
     // convenience getter for easy access to form fields
@@ -55,18 +53,19 @@ export class LoginComponent implements OnInit {
         this.loading = true;
         console.log('in login ', this.f['email'])
       //You can access this stored data in any component by subscribing to the responseData$ observable provided by the service.
-      this.dataService.setResponseData(this.accountService.login(this.f['email'].value, this.f['password'].value))
+      //this.dataService.setResponseData(this.accountService.login(this.f['email'].value, this.f['password'].value))
 
         this.accountService.login(this.f['email'].value, this.f['password'].value)
             .pipe(first())
             .subscribe({
-                next: () => {
-                  console.log('routing to chat ui')
+                next: (data) => {
+                  console.log('Data is ', data)
+                  this.dataService.setResponseData(data)
                     // get return url from query parameters or default to home page
 
                     //const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-                    this.router.navigateByUrl('http://localhost:4200/account/chatBot');
-                  window.location.href = 'http://localhost:4200/account/chatBot';
+                    this.router.navigate(['account/chatBot']);
+                  //window.location.href = 'http://localhost:4200/account/chatBot';
                 },
                 error: error => {
                     this.alertService.error(error);
