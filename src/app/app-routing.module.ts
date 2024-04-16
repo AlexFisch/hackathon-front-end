@@ -8,7 +8,7 @@ const routes: Routes = [
   { path: 'account', loadChildren: () => AccountModule },
 
   // otherwise redirect to home
-  { path: '**', redirectTo: '' }
+ // { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

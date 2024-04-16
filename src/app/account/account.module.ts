@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { AccountRoutingModule } from './account-routing.module';
 import { LayoutComponent } from './layout.component';
 import { LoginComponent } from './login.component';
+import { LogoutComponent } from './logout.component';
 import { RegisterComponent } from './register.component';
 import { HomeComponent } from './home.component';
 
@@ -18,7 +19,8 @@ import { HomeComponent } from './home.component';
         LayoutComponent,
         LoginComponent,
         RegisterComponent,
-        HomeComponent
+        HomeComponent,
+      LogoutComponent
     ]
 })
 export class AccountModule { }

@@ -2,7 +2,7 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-//import { DataService } from '../_services/data.service';
+import { DataService } from '../_services/data.service';
 
 import { AccountService, AlertService } from '../_services';
 import {User} from "../_models";
@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
         private router: Router,
         private accountService: AccountService,
         private alertService: AlertService,
-        //private dataService: DataService
+        private dataService: DataService
     ) {
       console.log('in the constructor')
     }
@@ -33,9 +33,9 @@ export class LoginComponent implements OnInit {
             email: ['', Validators.required],
             password: ['', Validators.required]
         });
-      // this.dataService.responseData$.subscribe(data => {
-      //   this.responseData = data;
-      // });
+      this.dataService.responseData$.subscribe(data => {
+        this.responseData = data;
+       });
     }
 
     // convenience getter for easy access to form fields
@@ -55,16 +55,18 @@ export class LoginComponent implements OnInit {
         this.loading = true;
         console.log('in login ', this.f['email'])
       //You can access this stored data in any component by subscribing to the responseData$ observable provided by the service.
-     // this.dataService.setResponseData(this.accountService.login(this.f['email'].value, this.f['password'].value))
+      this.dataService.setResponseData(this.accountService.login(this.f['email'].value, this.f['password'].value))
 
         this.accountService.login(this.f['email'].value, this.f['password'].value)
             .pipe(first())
             .subscribe({
                 next: () => {
+                  console.log('routing to chat ui')
                     // get return url from query parameters or default to home page
 
-                    const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-                    this.router.navigateByUrl(returnUrl);
+                    //const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+                    this.router.navigateByUrl('http://localhost:4200/account/chatBot');
+                  window.location.href = 'http://localhost:4200/account/chatBot';
                 },
                 error: error => {
                     this.alertService.error(error);
