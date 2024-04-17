@@ -11,7 +11,15 @@ export class ChatAiApiService {
 
   constructor(private http: HttpClient) { }
 
-  public sendMessage(message: string) {
-    return this.http.post<any>(`${this.apiUrl}/chat`, { message });
+  public firstMessage(userId: string, message: string) {
+    return this.http.post<any>(`${this.apiUrl}/chat/new`, { userId, message });
+  }
+
+  public getUser(userId: string) {
+    return this.http.get<any>(`${this.apiUrl}/user/${userId}`);
+  }
+
+  public getAllMessagesInThread(threadsId: string) {
+    return this.http.get<any>(`${this.apiUrl}/messages/${threadsId}`);
   }
 }
