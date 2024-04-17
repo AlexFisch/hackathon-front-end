@@ -22,4 +22,8 @@ export class ChatAiApiService {
   public getAllMessagesInThread(threadsId: string) {
     return this.http.get<any>(`${this.apiUrl}/messages/${threadsId}`);
   }
+
+  public createThreadAndRun(userId: string, role: string, content: string){
+    return this.http.post<any>(`${this.apiUrl}/threads/run}`, { userId, role, content });
+  }
 }

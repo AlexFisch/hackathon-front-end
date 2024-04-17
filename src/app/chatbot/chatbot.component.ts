@@ -16,6 +16,8 @@ export class ChatbotComponent implements OnInit{
   chatHistory: {role: string, content: string}[] = [];
   threadsArray!: Observable<string>[];
   latestThread !: Observable<any>[];
+  initialUserId !: string;
+  isNewChat !: boolean;
 
   constructor(private aiService: ChatAiApiService,
               private dataService: DataService,
@@ -25,23 +27,25 @@ export class ChatbotComponent implements OnInit{
 
   ngOnInit() {
     this.dataService.getResponseData().subscribe(data => {
-
     if (!data) {
       this.router.navigate(['account/login']);
     }
+    this.initialUserId = data._id;
+    this.getUserProfile(data._id);
 
   })
   }
 
-  getUserProfile(): void {
-    this.aiService.getUser("661e97780635815ce1c14eb5")
+  getUserProfile(userId: string): void {
+    this.aiService.getUser(userId)
       .subscribe(res => {
-        if (!res) {
-          this.router.navigate(['account/login']);
-        }
         this.threadsArray = res.threads;
         const latestThreadId = this.threadsArray[0];
         console.log("here's the threads array" + this.threadsArray);
+        if(!res.threads || res.threads.length < 1){
+          this.isNewChat = true;
+          return;
+        }
         this.getLatestThread(res.threads[0]);
       });
   }
@@ -55,14 +59,23 @@ export class ChatbotComponent implements OnInit{
 
         })
   }
+
   sendMessage() {
     const userMessage = this.userMessage;
     this.chatHistory.push({role: 'user', content: userMessage});
+    if(this.isNewChat){
+      this.startNewChatThread()
+    }
     // this.aiService.sendMessage("661e97780635815ce1c14eb5", this.userMessage)
     //     .subscribe(res => {
     //       this.botMessage = res.reply;
     //       this.chatHistory.push({role: 'assistant', content: this.botMessage});
     //       this.userMessage = '';
     //     });
+  }
+
+  startNewChatThread(): void {
+    this.aiService.createThreadAndRun(this.initialUserId, 'user', this.userMessage);
+    this.userMessage = '';
   }
 }
