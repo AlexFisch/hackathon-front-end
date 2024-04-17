@@ -25,7 +25,7 @@ export class AccountService {
     // }
 
     login(email: string, password: string) {
-        return this.http.post<User>(`http://10.196.58.206:3000/user/login`, { email, password })
+        return this.http.post<User>(`http://api.finbot.collinkleest.com/user/login`, { email, password })
             .pipe(map(user => {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                 //localStorage.setItem('user', JSON.stringify(user));
@@ -45,7 +45,7 @@ export class AccountService {
 
     register(user: User) {
       console.log('user is ', user)
-        return this.http.post(`http://10.196.58.206:3000/user`, user);
+        return this.http.post(`http://api.finbot.collinkleest.com/user`, user);
     }
 
     getAll() {
